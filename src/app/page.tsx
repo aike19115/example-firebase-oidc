@@ -1,95 +1,81 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import React from "react";
+
+import { getApp, getApps, initializeApp } from "firebase/app";
+import { getAuth, getRedirectResult, OAuthProvider, signInWithPopup, signInWithRedirect } from "firebase/auth";
+
+// These values are already public by the following url: https://geluksroute-7d52d.firebaseapp.com/__/firebase/init.json
+const firebaseConfig = {
+  apiKey: "AIzaSyBw4DWVR6njIzjf49TgFiWdd5ustuutXOQ",
+  appId: "1:738669891354:web:9ce496062e66ae540ee6a3",
+  authDomain: "geluksroute-7d52d.firebaseapp.com",
+  messagingSenderId: "738669891354",
+  projectId: "geluksroute-7d52d",
+  storageBucket: "geluksroute-7d52d.appspot.com",
+};
+
+const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const provider = new OAuthProvider("oidc.somtoday");
 
 export default function Home() {
+  async function loginPopup() {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log(result);
+        const credential = OAuthProvider.credentialFromResult(result);
+        console.log(credential);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  async function loginRedirect() {
+    signInWithRedirect(auth, provider)
+      .then((result) => {
+        console.log(result);
+        const credential = OAuthProvider.credentialFromResult(result);
+        console.log(credential);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  getRedirectResult(auth)
+    .then((result) => {
+      console.log("getRedirectResult", result);
+      if (result) {
+        const credential = OAuthProvider.credentialFromResult(result);
+        console.log(credential);
+      }
+    })
+    .catch((error) => {
+      console.error("catch", error);
+    });
+
+  React.useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      console.log("onAuthStateChanged", user);
+    });
+  }, []);
+
+  console.log("currentUser", auth.currentUser);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <main>
+      <div style={{ height: 20 }}></div>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+      <button onClick={loginPopup}>Inloggen - popup</button>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+      <div style={{ height: 20 }}></div>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+      <button onClick={loginRedirect}>Inloggen - redirect</button>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      <div style={{ height: 20 }}></div>
     </main>
   );
 }
