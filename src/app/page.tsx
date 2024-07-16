@@ -45,17 +45,19 @@ export default function Home() {
       });
   }
 
-  getRedirectResult(auth)
-    .then((result) => {
-      console.log("getRedirectResult", result);
-      if (result) {
-        const credential = OAuthProvider.credentialFromResult(result);
-        console.log(credential);
-      }
-    })
-    .catch((error) => {
-      console.error("catch", error);
-    });
+  React.useEffect(() => {
+    getRedirectResult(auth)
+      .then((result) => {
+        console.log("getRedirectResult", result);
+        if (result) {
+          const credential = OAuthProvider.credentialFromResult(result);
+          console.log(credential);
+        }
+      })
+      .catch((error) => {
+        console.error("catch", error);
+      });
+  }, []);
 
   React.useEffect(() => {
     auth.onAuthStateChanged((user) => {
