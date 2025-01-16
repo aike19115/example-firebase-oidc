@@ -9,7 +9,7 @@ import { getAuth, getRedirectResult, OAuthProvider, signInWithPopup, signInWithR
 const firebaseConfig = {
   apiKey: "AIzaSyBw4DWVR6njIzjf49TgFiWdd5ustuutXOQ",
   appId: "1:738669891354:web:9ce496062e66ae540ee6a3",
-  authDomain: "geluksroute-7d52d.firebaseapp.com",
+  authDomain: "firebase.degeluksroute.com",
   messagingSenderId: "738669891354",
   projectId: "geluksroute-7d52d",
   storageBucket: "geluksroute-7d52d.appspot.com",
